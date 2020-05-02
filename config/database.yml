@@ -80,6 +80,7 @@ test:
 #
 production:
   <<: *default
+  adapter: postgresql
   database: SWE363_project_api_production
   username: SWE363_project_api
   password: <%= ENV['SWE363_PROJECT_API_DATABASE_PASSWORD'] %>
