@@ -20,6 +20,7 @@ Rails.application.routes.draw do
   get 'users/getallofthem/:q', to: 'users#index'
   get 'users/getallofthem/', to: 'users#index'
 
+  post 'users/:id/delete', to: 'users#delete'
   # get 'users/:id', to: 'users#getUser'
 
   post 'questions/:id/deletebyadmin', to: 'questions#deletePost'

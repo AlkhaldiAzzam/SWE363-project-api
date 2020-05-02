@@ -17,14 +17,14 @@ class UsersController < ApplicationController
 
   def getUser
     user = User.find(params[:id])
-    response = {first_name: user.first_name, last_name: user.last_name, user_type: user.user_type, email: user.email, id: user.id}
+    response = {username: user.username,first_name: user.first_name, last_name: user.last_name, user_type: user.user_type, email: user.email, id: user.id}
     json_response(response)
   end
 
   def index
     
     if (params[:q]) 
-    users = User.where("first_name LIKE ?", "%" + params[:q] + "%")
+    users = User.where("username LIKE ?", "%" + params[:q] + "%")
       json_response(users)
       
     else
@@ -33,13 +33,26 @@ class UsersController < ApplicationController
     
   end
 
+
+  def delete
+    if current_user.user_type === "admin"
+      User.delete(params[:id])
+      
+
+      response = {message: " user has been deleted"}
+      json_response(response)
+    end
+  end
+
+
+
   def promote
     if current_user.user_type === "admin"
       @user = User.find(params[:id])
       @user.user_type = "admin"
       @user.save
 
-      response = {message: " #{@user.first_name} has been promoted"}
+      response = {message: " #{@user.username} has been promoted"}
       json_response(response)
     end
   end
@@ -50,7 +63,7 @@ class UsersController < ApplicationController
       @user.user_type = "normal user"
       @user.save
 
-      response = {message: " #{@user.first_name} has been demoted"}
+      response = {message: " #{@user.username} has been demoted"}
       json_response(response)
     end
   end
@@ -67,6 +80,7 @@ class UsersController < ApplicationController
     def user_params
       params.permit(
         :first_name,
+        :username,
         :last_name,
         :user_type,
         :u_id,
